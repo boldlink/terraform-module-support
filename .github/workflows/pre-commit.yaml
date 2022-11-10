@@ -2,6 +2,9 @@ name: pre-commit
 
 on:
   workflow_call:
+    secrets:
+      PAT:
+        required: true
 
 env:
   TF_VER: "0.14.11"
@@ -16,7 +19,7 @@ jobs:
     - name: Git checkout
       uses: actions/checkout@v3
       with:
-        token: ${{ secrets.AUTOMATION_TOKEN }}
+        token: ${{ secrets.PAT }}
 
     - name: Install terraform binary #and extract only terraform-docs binary as extracting other files will override some module files
       run: |
