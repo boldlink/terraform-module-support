@@ -19,7 +19,7 @@ jobs:
     - name: Git checkout
       uses: actions/checkout@v3
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.PAT }}
 
     - name: Install terraform binary #and extract only terraform-docs binary as extracting other files will override some module files
       run: |
@@ -56,7 +56,6 @@ jobs:
     - name: Push changes automatically!
       uses: EndBug/add-and-commit@v9
       with:
-        token: ${{ secrets.PAT }}
         message: '[Boldlinksig]: Pre-commit auto updated files on ${{ steps.date.outputs.date }}.'
         fetch: true
         pull: '--rebase --autostash'
