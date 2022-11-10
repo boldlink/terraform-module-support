@@ -2,6 +2,9 @@ name: pre-commit
 
 on:
   workflow_call:
+    secrets:
+      PAT:
+        required: true
 
 env:
   TF_VER: "0.14.11"
@@ -16,7 +19,7 @@ jobs:
     - name: Git checkout
       uses: actions/checkout@v3
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.PAT }}
 
     - name: Install terraform binary #and extract only terraform-docs binary as extracting other files will override some module files
       run: |
@@ -25,21 +28,18 @@ jobs:
         tar -zxvf terraform-docs.tar.gz terraform-docs
         chmod +x terraform-docs
         mv terraform-docs ${BIN_PATH}/terraform-docs
-
     - name: Install TFLint binary
       run: |
         curl -sSLo tflint_linux_amd64.zip https://github.com/terraform-linters/tflint/releases/download/${TFLINT_VER}/tflint_linux_amd64.zip
         unzip tflint_linux_amd64.zip
         chmod +x tflint
         mv tflint ${BIN_PATH}/tflint
-
     - name: Install Terraform binary
       run: |
         curl -sSLo terraform_${TF_VER}_linux_amd64.zip https://releases.hashicorp.com/terraform/${TF_VER}/terraform_${TF_VER}_linux_amd64.zip
         unzip terraform_${TF_VER}_linux_amd64.zip
         chmod +x terraform
         mv terraform ${BIN_PATH}/terraform
-
     - name: Enable python
       uses: actions/setup-python@v3
 
@@ -57,6 +57,8 @@ jobs:
       uses: EndBug/add-and-commit@v9
       with:
         message: '[Boldlinksig]: Pre-commit auto updated files on ${{ steps.date.outputs.date }}.'
+        fetch: true
+        pull: '--rebase --autostash'
         author_name: boldlinksig
         author_email: boldlinksig@boldlink.io
         committer_name: boldlinksig
