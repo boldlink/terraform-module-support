@@ -2,9 +2,6 @@ name: pre-commit
 
 on:
   workflow_call:
-    secrets:
-      PAT:
-        required: true
 
 env:
   TF_VER: "0.14.11"
@@ -19,7 +16,7 @@ jobs:
     - name: Git checkout
       uses: actions/checkout@v3
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.AUTOMATION_TOKEN }}
 
     - name: Install terraform binary #and extract only terraform-docs binary as extracting other files will override some module files
       run: |
@@ -55,8 +52,6 @@ jobs:
 
     - name: Push changes automatically!
       uses: EndBug/add-and-commit@v9
-      env:
-        GITHUB_TOKEN: ${{ secrets.PAT }}
       with:
         message: '[Boldlinksig]: Pre-commit auto updated files on ${{ steps.date.outputs.date }}.'
         fetch: true
