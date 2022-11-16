@@ -32,7 +32,7 @@ jobs:
         path: .tmp      
     - name: run release script
       shell: bash
-      run: bash ${GITHUB_WORKSPACE}/.terraform_ignore/scripts/github_action/release.sh && rm -rf ${GITHUB_WORKSPACE}/.tmp/
+      run: bash ${GITHUB_WORKSPACE}/.tmp/scripts/github_action/release.sh && rm -rf ${GITHUB_WORKSPACE}/.tmp/
 
   update_release_draft:
     needs: initial_release
