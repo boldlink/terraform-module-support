@@ -26,6 +26,7 @@ jobs:
           github-token: "${{ secrets.AUTOMATION_TOKEN }}" 
   auto-merge:
     runs-on: ubuntu-latest
+    needs: auto-approve
     steps:
       - id: auto-merge
         name: auto-merge
