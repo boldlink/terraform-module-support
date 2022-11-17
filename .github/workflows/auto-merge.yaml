@@ -24,7 +24,7 @@ jobs:
         if: github.actor == 'ndegwajohn'
         with:
           github-token: "${{ secrets.AUTOMATION_TOKEN }}" 
-  automerge:
+  auto-merge:
     runs-on: ubuntu-latest
     steps:
       - id: auto-merge
