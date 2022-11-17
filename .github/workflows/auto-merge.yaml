@@ -15,12 +15,22 @@ on:
   status: {}
 
 jobs:
+  auto-approve:
+    name: auto-approve prs by boldlinksig
+    runs-on: ubuntu-latest
+    steps:
+      - name: auto-approve
+        uses: hmarr/auto-approve-action@v3
+        if: github.actor == 'ndegwajohn'
+        with:
+          github-token: "${{ secrets.AUTOMATION_TOKEN }}" 
   automerge:
     runs-on: ubuntu-latest
     steps:
-      - id: aut-merge
+      - id: auto-merge
         name: auto-merge
         uses: "pascalgn/automerge-action@v0.15.5"
+        if: github.actor == 'ndegwajohn'
         env:
           GITHUB_TOKEN: "${{ secrets.AUTOMATION_TOKEN }}"  
           MERGE_LABELS: "automerge"
