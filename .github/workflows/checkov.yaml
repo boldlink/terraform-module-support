@@ -1,7 +1,9 @@
 name: Checkov
 on:
   workflow_call:
-
+    secrets:
+      SLACK_WEBHOOK:
+        required: true
 jobs:
   checkov-scan:
     runs-on: ubuntu-latest

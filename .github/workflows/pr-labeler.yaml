@@ -6,7 +6,9 @@ on:
       configuration-path:
         required: true
         type: string
-
+    secrets:
+      SLACK_WEBHOOK:
+        required: true
 jobs:
   pr-labeler:
     runs-on: ubuntu-latest
