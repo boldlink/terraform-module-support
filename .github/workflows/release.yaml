@@ -23,6 +23,7 @@ jobs:
       uses: actions/checkout@v3
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
+  
     - name: checkout labs-tools-scripts repo
       uses: actions/checkout@v3
       with:
@@ -30,9 +31,20 @@ jobs:
         repository: boldlink/labs-tools-scripts
         ref: 'main'
         path: .tmp      
+  
     - name: run release script
       shell: bash
       run: bash ${GITHUB_WORKSPACE}/.tmp/scripts/github_action/release.sh && rm -rf ${GITHUB_WORKSPACE}/.tmp/
+  
+    - name: Slack Notification failure
+      if: failure()
+      uses: rtCamp/action-slack-notify@v2
+      env:
+        SLACK_USERNAME: Boldlinksig
+        SLACK_MESSAGE: ":bell: Job failed."
+        SLACK_FOOTER: "Bodlink-SIG 2022"
+        SLACK_COLOR: ${{ job.status }} 
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
   update_release_draft:
     needs: initial_release
@@ -45,6 +57,7 @@ jobs:
         id: get-merged-pr
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+  
       - uses: release-drafter/release-drafter@v5
         with:
           publish: ${{ !contains(steps.get-merged-pr.outputs.labels, 'automerge') }}
@@ -52,3 +65,13 @@ jobs:
           config-name: ${{ inputs.config-name }} 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Slack Notification failure
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_USERNAME: Boldlinksig
+          SLACK_MESSAGE: ":bell: Job failed."
+          SLACK_FOOTER: "Bodlink-SIG 2022"
+          SLACK_COLOR: ${{ job.status }} 
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}

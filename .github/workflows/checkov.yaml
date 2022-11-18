@@ -1,8 +1,9 @@
 name: Checkov
 on:
   workflow_call:
+
 jobs:
-  scan:
+  checkov-scan:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -16,3 +17,12 @@ jobs:
         with:
           file : tfplan.json
           framework: terraform
+      - name: Slack Notification failure
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_USERNAME: Boldlinksig
+          SLACK_MESSAGE: ":bell: Job failed."
+          SLACK_FOOTER: "Bodlink-SIG 2022"
+          SLACK_COLOR: ${{ job.status }} 
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}

@@ -5,6 +5,8 @@ on:
     secrets:
       AUTOMATION_TOKEN:
         required: true
+      SLACK_WEBHOOK:
+        required: true
 
 env:
   TF_VER: "0.14.11"
@@ -28,12 +30,14 @@ jobs:
         tar -zxvf terraform-docs.tar.gz terraform-docs
         chmod +x terraform-docs
         mv terraform-docs ${BIN_PATH}/terraform-docs
+
     - name: Install TFLint binary
       run: |
         curl -sSLo tflint_linux_amd64.zip https://github.com/terraform-linters/tflint/releases/download/${TFLINT_VER}/tflint_linux_amd64.zip
         unzip tflint_linux_amd64.zip
         chmod +x tflint
         mv tflint ${BIN_PATH}/tflint
+
     - name: Install Terraform binary
       run: |
         curl -sSLo terraform_${TF_VER}_linux_amd64.zip https://releases.hashicorp.com/terraform/${TF_VER}/terraform_${TF_VER}_linux_amd64.zip
@@ -63,3 +67,13 @@ jobs:
         author_email: boldlinksig@boldlink.io
         committer_name: boldlinksig
         committer_email: boldlinksig@boldlink.io
+
+    - name: Slack Notification failure
+      if: failure()
+      uses: rtCamp/action-slack-notify@v2
+      env:
+        SLACK_USERNAME: Boldlinksig
+        SLACK_MESSAGE: ":bell: Job failed."
+        SLACK_FOOTER: "Bodlink-SIG 2022"
+        SLACK_COLOR: ${{ job.status }} 
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}

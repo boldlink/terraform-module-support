@@ -5,6 +5,8 @@ on:
     secrets:
       AUTOMATION_TOKEN:
         required: true
+      SLACK_WEBHOOK:
+        required: true
 
 env:
   REPO_NAME: ${{ github.event.repository.name }}
@@ -37,8 +39,17 @@ jobs:
     - name: Push changes automatically!
       uses: EndBug/add-and-commit@v9
       with:
-        message: '[Boldlinksig]: Workflow Badges Added/Updated.'
+        message: '[Boldlinksig]: Workflow Badges Added/Updated to all README.md files.'
         author_name: boldlinksig
         author_email: boldlinksig@boldlink.io
         committer_name: boldlinksig
         committer_email: boldlinksig@boldlink.io
+    - name: Slack Notification failure
+      if: failure()
+      uses: rtCamp/action-slack-notify@v2
+      env:
+        SLACK_USERNAME: Boldlinksig
+        SLACK_MESSAGE: ":bell: Job failed."
+        SLACK_FOOTER: "Bodlink-SIG 2022"
+        SLACK_COLOR: ${{ job.status }} 
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
