@@ -16,13 +16,18 @@ jobs:
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.AUTOMATION_TOKEN }}
-          repository: 'boldlink/test-repository2'
-          ref: 'feature/test-branch'
+          repository: 'boldlink/terraform-module-template'
+          ref: 'feature/reusable-workflows'
           path: .tmp
       - name: copy files
         run: |
           cp  -R ${GITHUB_WORKSPACE}/.tmp/.github/ ./
-          cp ${GITHUB_WORKSPACE}/.tmp/Makefile ${GITHUB_WORKSPACE}/.tmp/SECURITY.md ${GITHUB_WORKSPACE}/.tmp/CODEOWNERS ${GITHUB_WORKSPACE}/.tmp/.pre-commit-config.yaml ${GITHUB_WORKSPACE}/.tmp/.gitignore ${GITHUB_WORKSPACE}/.tmp/LICENSE .
+          cp ${GITHUB_WORKSPACE}/.tmp/Makefile \
+          ${GITHUB_WORKSPACE}/.tmp/SECURITY.md \
+          ${GITHUB_WORKSPACE}/.tmp/CODEOWNERS \
+          ${GITHUB_WORKSPACE}/.tmp/.pre-commit-config.yaml \
+          ${GITHUB_WORKSPACE}/.tmp/.gitignore \
+          ${GITHUB_WORKSPACE}/.tmp/LICENSE ./
       - name: create pull request
         uses: peter-evans/create-pull-request@v4
         with:

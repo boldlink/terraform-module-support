@@ -25,11 +25,14 @@ jobs:
         token: ${{ secrets.AUTOMATION_TOKEN }}
         repository: boldlink/labs-tools-scripts
         ref: 'main'
-        path: .terraform_ignore
+        path: .tmp
 
     - name: Adding Workflow Badges
       shell: bash
-      run: bash ${GITHUB_WORKSPACE}/.terraform_ignore/scripts/auto-badge/autobadge.sh && rm -rf ${GITHUB_WORKSPACE}/.terraform_ignore/
+      run: |
+        bash \
+        ${GITHUB_WORKSPACE}/.tmp/scripts/auto-badge/autobadge.sh \
+        && rm -rf ${GITHUB_WORKSPACE}/.tmp/
 
     - name: Push changes automatically!
       uses: EndBug/add-and-commit@v9
