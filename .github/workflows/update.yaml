@@ -20,7 +20,7 @@ jobs:
         with:
           token: ${{ secrets.AUTOMATION_TOKEN }}
           repository: 'boldlink/terraform-module-template'
-          ref: 'feature/reusable-workflows'
+          ref: '0.4.0'
           path: .tmp
 
       - name: copy files
