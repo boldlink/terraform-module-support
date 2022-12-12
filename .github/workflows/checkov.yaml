@@ -24,7 +24,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_USERNAME: Boldlinksig
-          SLACK_MESSAGE: ":bell: Job failed."
+          SLACK_MESSAGE: ":bell: Job failed in ${{ github.event.repository.name }} repository."
           SLACK_FOOTER: "Bodlink-SIG 2022"
           SLACK_COLOR: ${{ job.status }} 
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
