@@ -39,7 +39,7 @@ jobs:
     - name: Push changes automatically!
       uses: EndBug/add-and-commit@v9
       with:
-        message: '[Boldlinksig]: Workflow Badges Added/Updated to all README.md files.'
+        message: '[Boldlinksig]: Workflow Badges Added/Updated on all README.md files.'
         author_name: boldlinksig
         author_email: boldlinksig@boldlink.io
         committer_name: boldlinksig
