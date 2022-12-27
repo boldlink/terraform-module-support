@@ -1,0 +1,60 @@
+name: update-files
+
+on:
+  workflow_call:
+    secrets:
+      AUTOMATION_TOKEN:
+        required: true
+      SLACK_WEBHOOK:
+        required: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: local checkout
+        uses: actions/checkout@v3
+ 
+      - name: checkout modules-template
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.AUTOMATION_TOKEN }}
+          repository: 'boldlink/terraform-module-template'
+          ref: '0.4.0'
+          path: .tmp
+
+      - name: copy files
+        run: |
+          cp  -R ${GITHUB_WORKSPACE}/.tmp/.github/ ./
+          cp ${GITHUB_WORKSPACE}/.tmp/Makefile \
+          ${GITHUB_WORKSPACE}/.tmp/SECURITY.md \
+          ${GITHUB_WORKSPACE}/.tmp/CODEOWNERS \
+          ${GITHUB_WORKSPACE}/.tmp/.pre-commit-config.yaml \
+          ${GITHUB_WORKSPACE}/.tmp/.gitignore \
+          ${GITHUB_WORKSPACE}/.tmp/LICENSE ./
+
+      - name: create pull request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.AUTOMATION_TOKEN }}
+          author: boldlinksig <boldlinksig@boldlink.io>
+          committer: boldlinksig <boldlinksig@boldlink.io>
+          commit-message: Updated files
+          branch: automatic-files-update
+          base: main
+          delete-branch: true
+          title: '[automation] updated files automatically.'
+          body: 'This an automated PR to update files with new ones'
+          labels: |
+                automerge
+
+      - name: Slack Notification failure
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_USERNAME: Boldlinksig
+          SLACK_MESSAGE: ":bell: Job failed in ${{ github.event.repository.name }} repository."
+          SLACK_FOOTER: "Bodlink-SIG 2022"
+          SLACK_COLOR: ${{ job.status }} 
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          

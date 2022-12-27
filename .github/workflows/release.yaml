@@ -1,0 +1,79 @@
+name: Release
+
+on:
+  workflow_call:
+    inputs:
+      config-name:
+        required: true
+        type: string
+    secrets:
+      AUTOMATION_TOKEN:
+        required: true
+      SLACK_WEBHOOK:
+        required: true
+  
+permissions:
+  contents: read
+
+jobs:
+  initial_release:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+    - name: Git checkout
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+  
+    - name: checkout labs-tools-scripts repo
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.AUTOMATION_TOKEN }}
+        repository: boldlink/labs-tools-scripts
+        ref: 'main'
+        path: .tmp      
+  
+    - name: run release script
+      shell: bash
+      run: bash ${GITHUB_WORKSPACE}/.tmp/scripts/github_action/release.sh && rm -rf ${GITHUB_WORKSPACE}/.tmp/
+  
+    - name: Slack Notification failure
+      if: failure()
+      uses: rtCamp/action-slack-notify@v2
+      env:
+        SLACK_USERNAME: Boldlinksig
+        SLACK_MESSAGE: ":bell: Job failed in ${{ github.event.repository.name }} repository."
+        SLACK_FOOTER: "Bodlink-SIG 2022"
+        SLACK_COLOR: ${{ job.status }} 
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+  update_release_draft:
+    needs: initial_release
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions-ecosystem/action-get-merged-pull-request@v1
+        id: get-merged-pr
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+  
+      - uses: release-drafter/release-drafter@v5
+        with:
+          publish: ${{ !contains(steps.get-merged-pr.outputs.labels, 'automerge') }}
+          prerelease: false # Setting this option to true will have the upcoming release marked as a pre-release/ not production ready. By default we want it to remain as false.
+          config-name: ${{ inputs.config-name }} 
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Slack Notification failure
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_USERNAME: Boldlinksig
+          SLACK_MESSAGE: ":bell: Job failed in ${{ github.event.repository.name }} repository."
+          SLACK_FOOTER: "Bodlink-SIG 2022"
+          SLACK_COLOR: ${{ job.status }} 
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
