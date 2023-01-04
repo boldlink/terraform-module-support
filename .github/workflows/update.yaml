@@ -25,7 +25,8 @@ jobs:
 
       - name: copy files
         run: |
-          cp  -R ${GITHUB_WORKSPACE}/.tmp/.github/ ./
+          rm -R ./.github/
+          cp -R ${GITHUB_WORKSPACE}/.tmp/.github/ ./
           cp ${GITHUB_WORKSPACE}/.tmp/Makefile \
           ${GITHUB_WORKSPACE}/.tmp/SECURITY.md \
           ${GITHUB_WORKSPACE}/.tmp/CODEOWNERS \
