@@ -29,4 +29,5 @@ $ git clone git@github.com:boldlink/terraform-module-support.git
 
 5.Create a PR for terraform-module-support and post the link to slack devops-teams channel for someone to review it and approve for you.
 
-**NOTE** Ensure you test the new workflow before creating and submitting a PR since you risk releasing a bug to all terraform module PRs
+**NOTE:** 
+Ensure you test the new workflow before creating and submitting a PR since you risk releasing a bug to all terraform module PRs
