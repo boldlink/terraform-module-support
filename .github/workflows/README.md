@@ -9,7 +9,7 @@ This document breaks down the process of adding new reusable workflows to be use
 To add a new reusable workflow, follow these steps.
 
 1. Clone terraform-module-support repository in GitHub.
-``console
+```console
 $ git clone git@github.com:boldlink/terraform-module-support.git
 ```
 2. Checkout to a new branch, e.g `feature/auto-merge-workflow`.
