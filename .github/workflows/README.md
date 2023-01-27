@@ -14,7 +14,7 @@ $ git clone git@github.com:boldlink/terraform-module-support.git
 ```
 2. Checkout to a new branch, e.g `feature/auto-merge-workflow`.
 3. Define the workflow steps and jobs to be executed. Be sure to define the workflow will run on workflow_call. This is because the workflow will only be run when referenced by a caller workflow, not in this repository.
-4.Ensure the workflow has a slack notify step in case the workflow fails to run successfully. Sample code is as below.
+4. Ensure the workflow has a slack notify step in case the workflow fails to run successfully. Sample code is as below.
 ```console
     - name: Slack Notification failure
       if: failure()
