@@ -32,6 +32,7 @@ jobs:
           ${GITHUB_WORKSPACE}/.tmp/CODEOWNERS \
           ${GITHUB_WORKSPACE}/.tmp/.pre-commit-config.yaml \
           ${GITHUB_WORKSPACE}/.tmp/.gitignore \
+          ${GITHUB_WORKSPACE}/.tmp/PULL_REQUEST_TEMPLATE.md \
           ${GITHUB_WORKSPACE}/.tmp/LICENSE ./
 
       - name: create pull request
