@@ -20,7 +20,7 @@ jobs:
         with:
           token: ${{ secrets.AUTOMATION_TOKEN }}
           repository: 'boldlink/terraform-module-template'
-          ref: 'main'
+          ref: 'fix/automation-branch-prefix'
           path: .tmp
 
       - name: copy files
