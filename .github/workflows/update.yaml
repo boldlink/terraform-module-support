@@ -42,7 +42,7 @@ jobs:
           author: boldlinksig <boldlinksig@boldlink.io>
           committer: boldlinksig <boldlinksig@boldlink.io>
           commit-message: Updated files
-          branch: automatic-files-update
+          branch: automation-files-update
           base: main
           delete-branch: true
           title: '[automation] updated files automatically.'
