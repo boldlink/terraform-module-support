@@ -1,0 +1,122 @@
+name: test-examples
+
+on:
+  workflow_call:
+    secrets:
+      AUTOMATION_TOKEN:
+        required: true
+      SLACK_WEBHOOK:
+        required: true
+
+env:
+  TF_VER: '0.14.11'
+  NODE_VER: '14'
+
+jobs:
+  terraform-apply:
+    if: contains(github.event.repository.name, 'test') && (github.event.review.state == 'approved' ||  (github.event_name == 'pull_request' && github.event.action == 'opened'))
+    runs-on: self-hosted
+    steps:
+      - name: install python3 & pip3
+        run: |
+            sudo yum update
+            sudo yum install python3
+            python3 -V
+            curl -O https://bootstrap.pypa.io/get-pip.py
+            python3 get-pip.py
+            sudo pip3 install requests
+            pip3 install --upgrade awscli
+
+      - name: checkout repo code
+        uses: actions/checkout@v2
+
+      - name: setup nodejs
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${NODE_VER}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${TF_VER}
+
+      - name: Terraform plan
+        run: |
+            make tests  
+
+      - name: find
+        run: |
+            find . -type f -name "*.log" 
+     
+
+      - name: checkout labs-tools-scripts repo
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.AUTOMATION_TOKEN }}
+          repository: boldlink/labs-tools-scripts
+          ref: 'feature/pr-comments'
+          path: .tmp 
+
+      - name: Attach logs
+        run: |
+          cp ${GITHUB_WORKSPACE}/.tmp/scripts/github_action/comments.py ${GITHUB_WORKSPACE}
+          python3 comments.py
+          rm -rf ${GITHUB_WORKSPACE}/.tmp/
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PULL_NUMBER: ${{ github.event.pull_request.number }}
+
+  terraform-plan:
+    if: contains(github.event.repository.name, 'test') && (github.event_name == 'pull_request' && github.event.action == 'synchronize')
+
+    runs-on: self-hosted
+    steps:
+      - name: install python3
+        run: |
+            sudo yum update
+            sudo yum install python3
+            python3 -V
+            curl -O https://bootstrap.pypa.io/get-pip.py
+            python3 get-pip.py
+            sudo pip3 install requests
+            pip3 install --upgrade awscli
+
+      - name: checkout repo code
+        uses: actions/checkout@v2
+
+      - name: setup nodejs
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${NODE_VER}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${TF_VER}
+
+      - name: Terraform plan
+        run: |
+            make tfinit
+            make tfplan   
+
+      - name: find
+        run: |
+            find . -type f -name "*.log" 
+     
+
+      - name: checkout labs-tools-scripts repo
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.AUTOMATION_TOKEN }}
+          repository: boldlink/labs-tools-scripts
+          ref: 'feature/pr-comments'
+          path: .tmp 
+
+      - name: Attach logs
+        run: |
+          cp ${GITHUB_WORKSPACE}/.tmp/scripts/github_action/comments.py ${GITHUB_WORKSPACE}
+          python3 comments.py
+          rm -rf ${GITHUB_WORKSPACE}/.tmp/
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PULL_NUMBER: ${{ github.event.number }}
