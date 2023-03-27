@@ -14,7 +14,7 @@ env:
 
 jobs:
   terraform-apply:
-    if: contains(github.event.repository.name, 'test') && (github.event.review.state == 'approved' ||  (github.event_name == 'pull_request' && github.event.action == 'opened'))
+    if: contains(github.event.repository.name, 'aws') && (github.event.review.state == 'approved' ||  (github.event_name == 'pull_request' && github.event.action == 'opened'))
     runs-on: self-hosted
     steps:
       - name: install python3 & pip3
@@ -67,7 +67,7 @@ jobs:
           PULL_NUMBER: ${{ github.event.pull_request.number }}
 
   terraform-plan:
-    if: contains(github.event.repository.name, 'test') && (github.event_name == 'pull_request' && github.event.action == 'synchronize')
+    if: contains(github.event.repository.name, 'aws') && (github.event_name == 'pull_request' && github.event.action == 'synchronize')
 
     runs-on: self-hosted
     steps:
