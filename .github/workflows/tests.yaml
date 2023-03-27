@@ -33,7 +33,7 @@ jobs:
       - name: setup nodejs
         uses: actions/setup-node@v2
         with:
-          node-version: ${NODE_VER}
+          node-version: '${NODE_VER}'
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -87,7 +87,7 @@ jobs:
       - name: setup nodejs
         uses: actions/setup-node@v2
         with:
-          node-version: ${NODE_VER}
+          node-version: '${NODE_VER}'
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
