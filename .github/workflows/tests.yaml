@@ -59,8 +59,7 @@ jobs:
 
       - name: Attach logs
         run: |
-          cp ${GITHUB_WORKSPACE}/.tmp/scripts/github_action/comments.py ${GITHUB_WORKSPACE}
-          python3 comments.py
+          python3 ${GITHUB_WORKSPACE}/.tmp/scripts/github_action/comments.py
           rm -rf ${GITHUB_WORKSPACE}/.tmp/
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
