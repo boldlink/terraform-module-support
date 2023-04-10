@@ -43,11 +43,7 @@ jobs:
       - name: Terraform plan
         run: |
             make tfinit
-            make tfplan   
-
-      - name: find
-        run: |
-            find . -type f -name "*.log" 
+            make tfplan    
      
       - name: checkout labs-tools-scripts repo
         uses: actions/checkout@v3
