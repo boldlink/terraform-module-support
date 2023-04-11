@@ -41,8 +41,7 @@ jobs:
 
       - name: Terraform plan
         run: |
-            make tfinit
-            make tfplan    
+            make plan    
      
       - name: checkout labs-tools-scripts repo
         uses: actions/checkout@v3
