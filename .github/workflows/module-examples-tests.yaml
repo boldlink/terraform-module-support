@@ -24,7 +24,6 @@ jobs:
             python3 -V
             curl -O https://bootstrap.pypa.io/get-pip.py
             python3 get-pip.py
-            sudo pip3 install requests
             pip3 install --upgrade awscli
 
       - name: checkout repo code
@@ -55,6 +54,7 @@ jobs:
 
       - name: Attach logs
         run: |
+          pip3 --no-cache-dir install -r ${GITHUB_WORKSPACE}/.tmp/scripts/github_action/requirements.txt
           python3 ${GITHUB_WORKSPACE}/.tmp/scripts/github_action/comments.py
           rm -rf ${GITHUB_WORKSPACE}/.tmp/
         env:
