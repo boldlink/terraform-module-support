@@ -60,12 +60,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PULL_NUMBER: ${{ github.event.number }}
 
+      - name: Current Year
+        run: echo "YEAR=$(date +'%Y')" >> $GITHUB_ENV
+
       - name: Slack Notification failure
         if: failure()
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_USERNAME: Boldlinksig
           SLACK_MESSAGE: ":bell: Job failed in ${{ github.event.repository.name }} repository."
-          SLACK_FOOTER: "Bodlink-SIG 2022"
+          SLACK_FOOTER: "Boldlink-SIG {{ env.YEAR }}"
           SLACK_COLOR: ${{ job.status }} 
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
