@@ -8,23 +8,31 @@ jobs:
   checkov-scan:
     runs-on: ubuntu-latest
     steps:
+      - name: Current Year
+        id: year
+        run: echo "year=$(date +'%Y')" >> $GITHUB_OUTPUT
+      
       - uses: actions/checkout@v2
+        name: checkout repo code
+      
       - name: Set up Python 3.9
         uses: actions/setup-python@v1
         with:
           python-version: 3.9
+      
       - name: Test terraform with Checkov
         id: checkov
         uses: bridgecrewio/checkov-action@v12
         with:
           directory: .
           framework: terraform
+      
       - name: Slack Notification failure
         if: failure()
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_USERNAME: Boldlinksig
           SLACK_MESSAGE: ":bell: Job failed in ${{ github.event.repository.name }} repository."
-          SLACK_FOOTER: "Bodlink-SIG 2022"
+          SLACK_FOOTER: "Boldlink-SIG ${{ steps.year.outputs.year }}"
           SLACK_COLOR: ${{ job.status }} 
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}

@@ -17,6 +17,10 @@ jobs:
 
     runs-on: self-hosted
     steps:
+      - name: Current Year
+        id: year
+        run: echo "year=$(date +'%Y')" >> $GITHUB_OUTPUT
+
       - name: install python3
         run: |
             sudo yum update
@@ -60,15 +64,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PULL_NUMBER: ${{ github.event.number }}
 
-      - name: Current Year
-        run: echo "YEAR=$(date +'%Y')" >> $GITHUB_ENV
-
       - name: Slack Notification failure
         if: failure()
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_USERNAME: Boldlinksig
           SLACK_MESSAGE: ":bell: Job failed in ${{ github.event.repository.name }} repository."
-          SLACK_FOOTER: "Boldlink-SIG {{ env.YEAR }}"
+          SLACK_FOOTER: "Boldlink-SIG ${{ steps.year.outputs.year }}"
           SLACK_COLOR: ${{ job.status }} 
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
