@@ -13,7 +13,10 @@ env:
 
 jobs:
   terraform-plan:
-    if: contains(github.event.repository.name, 'aws') && (github.event_name == 'pull_request' && github.event.action == 'synchronize')
+    if: |
+          contains(github.repository, 'test') || 
+          contains(github.repository, 'ec2') &&
+          (github.event_name == 'pull_request' && github.event.action == 'synchronize')
 
     runs-on: self-hosted
     steps:
