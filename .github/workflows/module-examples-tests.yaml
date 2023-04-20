@@ -60,8 +60,8 @@ jobs:
 
       - name: Attach logs
         run: |
-          pip3 --no-cache-dir install -r ${GITHUB_WORKSPACE}/.tmp/scripts/github_action/requirements.txt
-          python3 ${GITHUB_WORKSPACE}/.tmp/scripts/github_action/comments.py
+          pip3 --no-cache-dir install -r ${GITHUB_WORKSPACE}/.tmp/scripts/github_actions/github_comments/requirements.txt
+          python3 ${GITHUB_WORKSPACE}/.tmp/scripts/github_actions/github_comments/comments.py
           rm -rf ${GITHUB_WORKSPACE}/.tmp/
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

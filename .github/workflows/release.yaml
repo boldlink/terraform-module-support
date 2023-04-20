@@ -40,7 +40,7 @@ jobs:
   
     - name: run release script
       shell: bash
-      run: bash ${GITHUB_WORKSPACE}/.tmp/scripts/github_action/release.sh && rm -rf ${GITHUB_WORKSPACE}/.tmp/
+      run: bash ${GITHUB_WORKSPACE}/.tmp/scripts/github_actions/github_release/release.sh && rm -rf ${GITHUB_WORKSPACE}/.tmp/
   
     - name: Slack Notification failure
       if: failure()
