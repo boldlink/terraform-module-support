@@ -55,7 +55,7 @@ jobs:
         with:
           token: ${{ secrets.AUTOMATION_TOKEN }}
           repository: boldlink/labs-tools-scripts
-          ref: 'feature/pr-comments'
+          ref: 'main'
           path: .tmp 
 
       - name: Attach logs
