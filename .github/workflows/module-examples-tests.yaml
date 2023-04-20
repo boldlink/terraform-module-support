@@ -1,0 +1,78 @@
+name: test-examples
+
+on:
+  workflow_call:
+    secrets:
+      AUTOMATION_TOKEN:
+        required: true
+      SLACK_WEBHOOK:
+        required: true
+
+env:
+  TF_VER: '0.14.11'
+
+jobs:
+  terraform-plan:
+    if: |
+          contains(github.repository, 'test') || 
+          contains(github.repository, 'ec2') &&
+          (github.event_name == 'pull_request' && github.event.action == 'synchronize')
+
+    runs-on: self-hosted
+    steps:
+      - name: Current Year
+        id: year
+        run: echo "year=$(date +'%Y')" >> $GITHUB_OUTPUT
+
+      - name: install python3
+        run: |
+            sudo yum update
+            sudo yum install python3
+            python3 -V
+            curl -O https://bootstrap.pypa.io/get-pip.py
+            python3 get-pip.py
+            pip3 install --upgrade awscli
+
+      - name: checkout repo code
+        uses: actions/checkout@v2
+
+      - name: setup nodejs
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${TF_VER}
+
+      - name: Terraform plan
+        run: |
+            make plan    
+     
+      - name: checkout labs-tools-scripts repo
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.AUTOMATION_TOKEN }}
+          repository: boldlink/labs-tools-scripts
+          ref: 'main'
+          path: .tmp 
+
+      - name: Attach logs
+        run: |
+          pip3 --no-cache-dir install -r ${GITHUB_WORKSPACE}/.tmp/scripts/github_actions/github_comments/requirements.txt
+          python3 ${GITHUB_WORKSPACE}/.tmp/scripts/github_actions/github_comments/github-comments.py
+          rm -rf ${GITHUB_WORKSPACE}/.tmp/
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PULL_NUMBER: ${{ github.event.number }}
+
+      - name: Slack Notification failure
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_USERNAME: Boldlinksig
+          SLACK_MESSAGE: ":bell: Job failed in ${{ github.event.repository.name }} repository."
+          SLACK_FOOTER: "Boldlink-SIG ${{ steps.year.outputs.year }}"
+          SLACK_COLOR: ${{ job.status }} 
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}

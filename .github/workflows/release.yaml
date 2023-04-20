@@ -21,6 +21,10 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
+    - name: Current Year
+      id: year
+      run: echo "year=$(date +'%Y')" >> $GITHUB_OUTPUT
+
     - name: Git checkout
       uses: actions/checkout@v3
       with:
@@ -36,7 +40,7 @@ jobs:
   
     - name: run release script
       shell: bash
-      run: bash ${GITHUB_WORKSPACE}/.tmp/scripts/github_action/release.sh && rm -rf ${GITHUB_WORKSPACE}/.tmp/
+      run: bash ${GITHUB_WORKSPACE}/.tmp/scripts/github_actions/github_release/release.sh && rm -rf ${GITHUB_WORKSPACE}/.tmp/
   
     - name: Slack Notification failure
       if: failure()
@@ -44,7 +48,7 @@ jobs:
       env:
         SLACK_USERNAME: Boldlinksig
         SLACK_MESSAGE: ":bell: Job failed in ${{ github.event.repository.name }} repository."
-        SLACK_FOOTER: "Bodlink-SIG 2022"
+        SLACK_FOOTER: "Boldlink-SIG ${{ steps.year.outputs.year }}"
         SLACK_COLOR: ${{ job.status }} 
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
@@ -55,6 +59,10 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
+      - name: Current Year
+        id: year
+        run: echo "year=$(date +'%Y')" >> $GITHUB_OUTPUT
+
       - uses: actions-ecosystem/action-get-merged-pull-request@v1
         id: get-merged-pr
         with:
@@ -74,6 +82,6 @@ jobs:
         env:
           SLACK_USERNAME: Boldlinksig
           SLACK_MESSAGE: ":bell: Job failed in ${{ github.event.repository.name }} repository."
-          SLACK_FOOTER: "Bodlink-SIG 2022"
+          SLACK_FOOTER: "Boldlink-SIG ${{ steps.year.outputs.year }}"
           SLACK_COLOR: ${{ job.status }} 
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}

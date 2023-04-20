@@ -22,7 +22,7 @@ $ git clone git@github.com:boldlink/terraform-module-support.git
       env:
         SLACK_USERNAME: Boldlinksig
         SLACK_MESSAGE: ":bell: Job failed in ${{ github.event.repository.name }} repository."
-        SLACK_FOOTER: "Bodlink-SIG 2023"
+        SLACK_FOOTER: "Boldlink-SIG ${{ steps.year.outputs.year }}"
         SLACK_COLOR: ${{ job.status }} 
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 ```

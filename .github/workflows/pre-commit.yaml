@@ -18,6 +18,10 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
+    - name: Current Year
+      id: year
+      run: echo "year=$(date +'%Y')" >> $GITHUB_OUTPUT
+
     - name: Git checkout
       uses: actions/checkout@v3
       with:
@@ -74,6 +78,6 @@ jobs:
       env:
         SLACK_USERNAME: Boldlinksig
         SLACK_MESSAGE: ":bell: Job failed in ${{ github.event.repository.name }} repository."
-        SLACK_FOOTER: "Bodlink-SIG 2022"
+        SLACK_FOOTER: "Boldlink-SIG ${{ steps.year.outputs.year }}"
         SLACK_COLOR: ${{ job.status }} 
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
