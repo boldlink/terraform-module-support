@@ -39,7 +39,7 @@ jobs:
           GITHUB_TOKEN: "${{ secrets.AUTOMATION_TOKEN }}"  
           MERGE_LABELS: "automerge"
           MERGE_METHOD: "squash"
-          MERGE_RETRIES: "6"
+#          MERGE_RETRIES: "6"
           MERGE_RETRY_SLEEP: "10000"
           MERGE_DELETE_BRANCH: "true"
           MERGE_ERROR_FAIL: "true"
