@@ -24,7 +24,7 @@ jobs:
         with:
           token: ${{ secrets.AUTOMATION_TOKEN }}
           repository: 'boldlink/terraform-module-template'
-          ref: 'main'
+          ref: 'feature/auto-merge'
           path: .tmp
 
       - name: copy files
