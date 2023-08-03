@@ -17,7 +17,7 @@ jobs:
         uses: hmarr/auto-approve-action@v3
         if: github.actor == 'boldlinksig'
         with:
-          github-token: "${{ secrets.AUTOMATION_TOKEN }}" 
+          github-token: "${{ secrets.GITHUB_TOKEN }}" 
       - name: Slack Notification failure
         if: failure()
         uses: rtCamp/action-slack-notify@v2
