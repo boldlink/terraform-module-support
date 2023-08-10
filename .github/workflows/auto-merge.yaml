@@ -18,15 +18,6 @@ jobs:
         if: github.actor == 'boldlinksig'
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}" 
-      - name: Slack Notification failure
-        if: failure()
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_USERNAME: Boldlinksig
-          SLACK_MESSAGE: ":bell: Job failed."
-          SLACK_FOOTER: "Bodlink-SIG 2022"
-          SLACK_COLOR: ${{ job.status }} 
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
   
   auto-merge:
     runs-on: ubuntu-latest
