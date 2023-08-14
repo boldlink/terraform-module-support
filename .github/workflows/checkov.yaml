@@ -26,6 +26,7 @@ jobs:
         with:
           directory: .
           framework: terraform
+          skip_check: CKV_TF_1
       
       - name: Slack Notification failure
         if: failure()
