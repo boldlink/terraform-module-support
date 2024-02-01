@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: auto-approve
         uses: hmarr/auto-approve-action@v3
-        if: github.actor == 'boldlinksig'
+        if: github.actor == 'ndegwajohn'
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}" 
   
@@ -28,7 +28,7 @@ jobs:
       - id: auto-merge
         name: auto-merge
         uses: "pascalgn/automerge-action@v0.15.5"
-        if: github.actor == 'boldlinksig'
+        if: github.actor == 'ndegwajohn'
         env:
           GITHUB_TOKEN: "${{ secrets.AUTOMATION_TOKEN }}"  
           MERGE_LABELS: "automerge"
