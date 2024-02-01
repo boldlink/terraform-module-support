@@ -12,6 +12,8 @@ jobs:
   auto-approve:
     name: auto-approve prs by boldlinksig
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
       - name: auto-approve
         uses: hmarr/auto-approve-action@v3
