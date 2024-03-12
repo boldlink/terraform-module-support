@@ -70,7 +70,7 @@ jobs:
   
       - uses: release-drafter/release-drafter@v5
         with:
-          publish: ${{ !contains(steps.get-merged-pr.outputs.labels, 'automerge') }}
+          publish: ${{ !contains(fromJSON('[ "automerge", "documentation"]'), steps.get-merged-pr-labels.outputs.labels) }}
           prerelease: false # Setting this option to true will have the upcoming release marked as a pre-release/ not production ready. By default we want it to remain as false.
           config-name: ${{ inputs.config-name }} 
         env:
